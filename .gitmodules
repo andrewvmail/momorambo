@@ -1,0 +1,3 @@
+[submodule "mongooseim/github-src"]
+	path = mongooseim/github-src
+	url = https://github.com/esl/MongooseIM
