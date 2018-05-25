@@ -1,0 +1,8 @@
+{
+  "redisHost": "localhost",
+  "mysqlHost": "localhost",
+  "riakHost": "localhost",
+  "testData":  {
+    "token": "sometoken" 
+  }
+}
