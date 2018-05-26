@@ -10,3 +10,10 @@ clean-docker-machine: ## Delete default and re-create machine name default using
 		@docker-machine env default
 		@eval $(docker-machine env default)
 
+update_terraform_ssh_keys: ## Update Digital Ocean SSH Keys on Terraform Files (DO_TOKEN required)
+	@echo "Pulling keys from DO need DO_TOKEN to be set in bashrc or zshrc file"
+	@echo "Using token: ${DO_TOKEN} "
+	$(eval SSH_KEYS=$(shell curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer ${DO_TOKEN}" "https://api.digitalocean.com/v2/account/keys"))
+	$(eval SSH_KEYS=$(shell echo '${SSH_KEYS}' | jq -c '.ssh_keys[].id' | tr '\n' ',' | sed 's/\(.*\),/\1 /' ))
+	cp terraform/main.tf ./terraform/main.tf.bak
+	sed 's/.*ssh_keys.*/    ssh_keys = [ $(subst /,\/,$(SSH_KEYS)) ]/' terraform/main.tf.bak > terraform/main.tf
